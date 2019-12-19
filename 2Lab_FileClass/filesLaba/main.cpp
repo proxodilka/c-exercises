@@ -23,7 +23,7 @@ void generateComplex(Complex* destination, int n) {
 void pickFile(File* fileHandler) {
 	string filename;
 	
-	cout << "Введите путь к файлу:\n>";
+	cout << "Enter file path:\n>";
 	cin >> filename;
 
 	fileHandler->open(filename);
@@ -35,7 +35,7 @@ void readFromFile(File* fileHandler, bool isShowDialog=false) {
 	int symbAmount = fileHandler->length();
 
 	if (isShowDialog) {
-		cout << "Введите кол-во символов для считывания:\n>";
+		cout << "How many symbols you want to read:\n>";
 		cin >> symbAmount;
 	}
 	else {
@@ -53,8 +53,8 @@ void readFromFile(File* fileHandler, bool isShowDialog=false) {
 void setPosition(File* fileHandler) {
 	int newPosition = 0;
 
-	cout << "Установленная позиция: " << fileHandler->getPosition() << " | Длинна файла: " << fileHandler->length() << "\n"
-		 << "Введите новую позицию:\n>";
+	cout << "Current position: " << fileHandler->getPosition() << " | File length: " << fileHandler->length() << "\n"
+		 << "Enter new position:\n>";
 
 	cin >> newPosition;
 	
@@ -97,13 +97,13 @@ void readComplex(ComplexReader* fileHandler) {
 void writeComplex(ComplexReader* fileHandler) {
 	int complexAmount = 0;
 
-	cout << "Сколько комплексных чисел записать?\n>";
+	cout << "How many complex numbers to write?\n>";
 	cin >> complexAmount;
 
 	vector<Complex> data(complexAmount);
 	generateComplex(data.data(), complexAmount);
 
-	cout << "Сгенерированная последовательность:\n";
+	cout << "Generated sequence:\n";
 
 	for (Complex complex : data) {
 		cout << "\t" << complex << "\n";
@@ -116,34 +116,34 @@ void writeComplex(ComplexReader* fileHandler) {
 }
 
 void getComplexFileSize(ComplexReader* fileHandler) {
-	cout << "Кол-во комплексных чисел в файле: " << fileHandler->size() << "\n";
+	cout << "Amount of complex numbers at file: " << fileHandler->size() << "\n";
 	system("pause");
 }
 
 
 vector<menuItem> subOptionsFile = {
-	{"Считать весь файл", []() {readFromFile(&file); } },
-	{"Считать N символов", []() {readFromFile(&file, true); }},
-	{"Записать данные", []() {readToFile(&file, false); }},
-	{"Записать данные в конец", []() {readToFile(&file, true); }},
-	{"Очистить файл", []() {clearFile(&file); }},
-	{"Установить позицию", []() {setPosition(&file); }}
+	{"Read all file", []() {readFromFile(&file); } },
+	{"Read N symbols", []() {readFromFile(&file, true); }},
+	{"Write data", []() {readToFile(&file, false); }},
+	{"Append data", []() {readToFile(&file, true); }},
+	{"Clear file", []() {clearFile(&file); }},
+	{"Set position", []() {setPosition(&file); }}
 };
 
 vector<menuItem> subOptionsComplexFile = {
-	{"Считать объекты в вектор", []() {readComplex(&complexFile); } },
-	{"Записать N объектов", []() {writeComplex(&complexFile); }},
-	{"Очистить файл", []() {clearFile(&complexFile); }},
-	{"Кол-во объектов", []() {getComplexFileSize(&complexFile); }}
+	{"Get objects as vector", []() {readComplex(&complexFile); } },
+	{"Write N objects", []() {writeComplex(&complexFile); }},
+	{"Clear file", []() {clearFile(&complexFile); }},
+	{"Amount of objects", []() {getComplexFileSize(&complexFile); }}
 };
 
 vector<menuItem> mainOptions = {
-	{"Выбрать файл", []() {
-			subMenu.set_menu(subOptionsFile, "Выберите действие");
+	{"Pick file", []() {
+			subMenu.set_menu(subOptionsFile, "Pick option");
 			pickFile(&file);
 		}},
-	{"Выбрать файл комплексного числа", []() {
-			subMenu.set_menu(subOptionsComplexFile, "Выберите действие");
+	{"Pick file with complex numbers", []() {
+			subMenu.set_menu(subOptionsComplexFile, "Pick option");
 			pickFile(&complexFile);
 		}}
 };
@@ -152,7 +152,7 @@ vector<menuItem> mainOptions = {
 void init() {
 	setlocale(LC_ALL, "rus");
 
-	mainMenu.set_menu(mainOptions, "Выберите действие:");
+	mainMenu.set_menu(mainOptions, "Pick option:");
 }
 
 int main() {

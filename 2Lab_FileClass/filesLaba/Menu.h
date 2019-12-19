@@ -29,7 +29,7 @@ public:
 private:
 	vector<menuItem> options;
 	string state = "setup";
-	string header = "Выберите действие:";
+	string header = "Pick option:";
 	istream& input = std::cin;
 	ostream& output = std::cout;
 
@@ -42,7 +42,7 @@ private:
 		for (int i = 0; i < options.size(); i++) {
 			output << "\t" << i + 1 << ". " << options[i].first << "\n";
 		}
-		output << "\t" << options.size() + 1 << ". " << "Выход\n";
+		output << "\t" << options.size() + 1 << ". " << "Back\n";
 		output << ">";
 		read_option();
 	}

@@ -1,0 +1,7 @@
+﻿  main.cpp
+C:\Users\rp-re\OneDrive\Desktop\labs\labs-c-plus-plus\2Lab_FileClass\filesLaba\File.h(50,15): warning C4244: 'initializing': conversion from 'std::streamoff' to 'int', possible loss of data
+C:\Users\rp-re\OneDrive\Desktop\labs\labs-c-plus-plus\2Lab_FileClass\filesLaba\File.h(53,14): warning C4244: 'initializing': conversion from 'std::streamoff' to 'int', possible loss of data
+C:\Users\rp-re\OneDrive\Desktop\labs\labs-c-plus-plus\2Lab_FileClass\filesLaba\File.h(60,20): warning C4244: 'return': conversion from 'std::streamoff' to 'int', possible loss of data
+C:\Users\rp-re\OneDrive\Desktop\labs\labs-c-plus-plus\2Lab_FileClass\filesLaba\File.h(69,20): warning C4244: 'initializing': conversion from 'std::streamoff' to 'int', possible loss of data
+C:\Users\rp-re\OneDrive\Desktop\labs\labs-c-plus-plus\2Lab_FileClass\filesLaba\Menu.h(42,21): warning C4018: '<': signed/unsigned mismatch
+  filesLaba.vcxproj -> C:\Users\rp-re\OneDrive\Desktop\labs\labs-c-plus-plus\2Lab_FileClass\Debug\filesLaba.exe
