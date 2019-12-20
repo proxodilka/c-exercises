@@ -5,7 +5,7 @@ using namespace std;
 
 Menu::Menu() {}
 
-Menu::Menu(const vector<menuItem>& opt, string _header) : options(opt), header(_header) {}
+Menu::Menu(const Vector<menuItem>& opt, string _header) : options(opt), header(_header) {}
 
 void Menu::addOption(menuItem opt) { 
 	options.push_back(opt);
@@ -14,7 +14,7 @@ void Menu::addOption(menuItem opt) {
 	}
 }
 
-void Menu::set_menu(const vector<menuItem>& opt, string _header) {
+void Menu::set_menu(const Vector<menuItem>& opt, string _header) {
 	options = opt;
 	header = _header;
 }
@@ -28,7 +28,7 @@ void Menu::print_options(bool is_clear_screen) {
 		system("cls");
 	}
 
-	output << header << "\n";
+	print_header();
 	for (int i = 0; i < options.size(); i++) {
 		output << "\t" << i + 1 << ". " << options[i].first << "\n";
 	}
@@ -68,6 +68,10 @@ void Menu::read_option() {
 
 void Menu::print_error(exception e) {
 	output << "error:\n" << e.what();
+}
+
+void Menu::print_header() {
+	output << header << "\n";
 }
 
 

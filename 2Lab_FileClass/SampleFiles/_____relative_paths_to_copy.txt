@@ -1,5 +1,0 @@
-..\SampleFiles\complex.txt
-..\SampleFiles\complex2.txt
-..\SampleFiles\incorrect_complex_file.txt
-..\SampleFiles\test.txt
-..\SampleFiles\1.txt

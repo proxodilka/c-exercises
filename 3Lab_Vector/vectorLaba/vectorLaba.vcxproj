@@ -20,8 +20,8 @@
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <VCProjectVersion>16.0</VCProjectVersion>
-    <ProjectGuid>{B8887EA7-0B15-43EC-AEC8-EB97519F21A6}</ProjectGuid>
-    <RootNamespace>filesLaba</RootNamespace>
+    <ProjectGuid>{EA60120B-3D16-42B4-A334-41C64EAC74C3}</ProjectGuid>
+    <RootNamespace>vectorLaba</RootNamespace>
     <WindowsTargetPlatformVersion>10.0</WindowsTargetPlatformVersion>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
@@ -76,7 +76,6 @@
       <Optimization>Disabled</Optimization>
       <SDLCheck>true</SDLCheck>
       <ConformanceMode>true</ConformanceMode>
-      <AdditionalOptions>/std:c++latest %(AdditionalOptions)</AdditionalOptions>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
@@ -124,17 +123,15 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="ComplexReader\ComplexReader.cpp" />
     <ClCompile Include="Complex\Complex.cpp" />
-    <ClCompile Include="File\File.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="Menu\Menu.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="ComplexReader\ComplexReader.h" />
     <ClInclude Include="Complex\Complex.h" />
-    <ClInclude Include="File\File.h" />
     <ClInclude Include="Menu\Menu.h" />
+    <ClInclude Include="Vector.h" />
+    <ClInclude Include="Vector\Vector.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

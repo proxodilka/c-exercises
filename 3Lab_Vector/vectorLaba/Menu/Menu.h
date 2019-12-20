@@ -3,7 +3,7 @@
 #include <string>
 #include <stdlib.h>
 #include <iostream>
-#include <vector>
+#include "../Vector/Vector.h"
 #include <stdlib.h>
 #include <functional>
 
@@ -13,16 +13,21 @@ class Menu {
 
 public:
 	Menu();
-	Menu(const std::vector<menuItem>& opt, std::string _header);
+
+	Menu(const Vector<menuItem>& opt, std::string _header);
+
 	void addOption(menuItem opt);
 
-	void set_menu(const std::vector<menuItem>& opt, std::string _header);
+	void set_menu(const Vector<menuItem>& opt, std::string _header);
 
 	void run();
+
 	void set_header(std::string _header);
 
+	void print_header();
+
 private:
-	std::vector<menuItem> options;
+	Vector<menuItem> options;
 	std::string state = "setup";
 	std::string header = "Pick option:";
 	std::istream& input = std::cin;
