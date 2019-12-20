@@ -124,13 +124,17 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="ComplexReader\ComplexReader.cpp" />
+    <ClCompile Include="Complex\Complex.cpp" />
+    <ClCompile Include="File\File.cpp" />
     <ClCompile Include="main.cpp" />
+    <ClCompile Include="Menu\Menu.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="Complex.h" />
-    <ClInclude Include="ComplexReader.h" />
-    <ClInclude Include="File.h" />
-    <ClInclude Include="Menu.h" />
+    <ClInclude Include="ComplexReader\ComplexReader.h" />
+    <ClInclude Include="Complex\Complex.h" />
+    <ClInclude Include="File\File.h" />
+    <ClInclude Include="Menu\Menu.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
