@@ -1,5 +1,6 @@
 #pragma once
 #include <functional>
+#include <iostream>
 
 using namespace std;
 
@@ -12,6 +13,33 @@ private:
 	const static size_t max_size = INT_MAX;
 	size_t _size, capacity;
 	T* data;
+
+	void resize(size_t new_size) { 
+
+		T* new_data = static_cast<T*>(operator new[](sizeof(T)*new_size)); //allocate memory without constructing objects
+		for (size_t i = 0; i < min(_size, new_size); i++) {
+			new (new_data + i) T(data[i]); //construct new object at (new_data+i)
+		}
+
+		size_t oldSize = _size;
+		dispose();
+		_size = oldSize;
+
+		data = new_data;
+		capacity = new_size;
+	}
+
+	void tryToReleaseMemory(){
+		if (_size < capacity / 2) {
+			resize(capacity / 2);
+		}
+	}
+
+	void destructContainedObjects() {
+		for (size_t i = 0; i < _size; i++) {
+			data[i].~T();
+		}
+	}
 
 public:
 	Vector() {
@@ -58,10 +86,12 @@ public:
 	void removeAt(size_t index) {
 		if (index >= _size)
 			return;
-		for (size_t i = index; i < _size - 1; i++) {
-			data[i] = data[i + 1];
-		}
+
+		data[_size - 1].~T();
+		copy(data + index + 1, data + _size, data + index);
 		_size--;
+
+		tryToReleaseMemory();
 	}
 
 	void remove(function<bool(T)> predicate) {
@@ -90,18 +120,7 @@ public:
 			throw invalid_argument("Max capacity exceeded");
 		}
 
-
-		T *new_data = (T*)operator new(sizeof(T)*new_size); //allocate memory without constructing objects
-		for (size_t i = 0; i < _size; i++) {
-			new (new_data + i) T(data[i]); //construct new object at (new_data+i)
-		}
-
-		size_t oldSize = _size;
-		dispose();
-		_size = oldSize;
-
-		data = new_data;
-		capacity = new_size;
+		resize(new_size);
 	}
 
 	size_t size() const {
@@ -111,7 +130,11 @@ public:
 	void pop_back() {
 		if (_size == 0)
 			return;
+
+		data[_size-1].~T();
 		_size--;
+
+		tryToReleaseMemory();
 	}
 
 	void fill(T value) {
@@ -138,15 +161,14 @@ public:
 		return -1;
 	}
 	
-	void clear() {
+	void clear() { // destructs contained objects, but does not release memory
+		destructContainedObjects();
 		_size = 0;
 	}
 
-	void dispose() {
-		for (size_t i = 0; i < _size; i++) {
-			data[i].~T();
-		}
-		operator delete(data);
+	void dispose() { // destructs contained objects and release memory
+		destructContainedObjects();
+		operator delete[](data);
 		data = nullptr;
 		_size = capacity = 0;
 	}
