@@ -1,8 +1,5 @@
 #pragma once
 #include <functional>
-#include <iostream>
-
-using namespace std;
 
 #define min(a,b) (((a)<(b))?(a):(b))
 
@@ -77,7 +74,7 @@ public:
 			reserve(capacity ? min(capacity * 2, max_size) : 1);
 		}
 		if (_size >= capacity) {
-			throw exception("Can't allocate more memory.");
+			throw std::exception("Can't allocate more memory.");
 		}
 		new (data + _size) T(value); //construct new object at (data+_size)
 		_size++;
@@ -87,14 +84,14 @@ public:
 		if (index >= _size)
 			return;
 
-		data[_size - 1].~T();
-		copy(data + index + 1, data + _size, data + index);
+		data[index].~T();
+		std::copy(data + index + 1, data + _size, data + index);
 		_size--;
 
 		tryToReleaseMemory();
 	}
 
-	void remove(function<bool(T)> predicate) {
+	void remove(std::function<bool(T)> predicate) {
 		for (size_t i = 0; i < _size; i++) {
 			if (predicate(data[i])) {
 				removeAt(i);
@@ -103,7 +100,7 @@ public:
 		}
 	}
 
-	size_t lastIndexOf(function<bool(T)> predicate) {
+	size_t lastIndexOf(std::function<bool(T)> predicate) {
 		size_t resultIndex = -1;
 		for (size_t i = 0; i < _size; i++) {
 			if (predicate(data[i])) {
@@ -117,7 +114,7 @@ public:
 		if (new_size <= capacity)
 			return;
 		if (new_size > max_size) {
-			throw invalid_argument("Max capacity exceeded");
+			throw std::invalid_argument("Max capacity exceeded");
 		}
 
 		resize(new_size);
@@ -143,16 +140,16 @@ public:
 		}
 	}
 
-	T& find(function<bool(T)> predicate) {
+	T& find(std::function<bool(T)> predicate) {
 		for (size_t i = 0; i < _size; i++) {
 			if (predicate(data[i])) {
 				return data[i];
 			}
 		}
-		throw exception("Element not found.");
+		throw std::exception("Element not found.");
 	}
 
-	size_t findIndex(function<bool(T)> predicate) {
+	size_t findIndex(std::function<bool(T)> predicate) {
 		for (size_t i = 0; i < _size; i++) {
 			if (predicate(data[i])) {
 				return i;
@@ -175,7 +172,7 @@ public:
 
 	T& operator[](size_t index) const{
 		if (index >= _size)
-			throw invalid_argument("Index does not exists");
+			throw std::invalid_argument("Index does not exists");
 		return data[index];
 	}
 
