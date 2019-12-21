@@ -39,6 +39,9 @@ private:
 	}
 
 public:
+
+	static const size_t npos = -1;
+
 	Vector() {
 		_size = capacity = 0;
 		data = nullptr;
@@ -100,8 +103,8 @@ public:
 		}
 	}
 
-	int lastIndexOf(std::function<bool(T)> predicate) {
-		int resultIndex = -1;
+	size_t lastIndexOf(std::function<bool(T)> predicate) {
+		size_t resultIndex = -1;
 		for (size_t i = 0; i < _size; i++) {
 			if (predicate(data[i])) {
 				resultIndex = i;
@@ -149,7 +152,7 @@ public:
 		throw std::invalid_argument("Element not found.");
 	}
 
-	int findIndex(std::function<bool(T)> predicate) {
+	size_t findIndex(std::function<bool(T)> predicate) {
 		for (size_t i = 0; i < _size; i++) {
 			if (predicate(data[i])) {
 				return i;
