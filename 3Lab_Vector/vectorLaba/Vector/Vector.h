@@ -104,7 +104,7 @@ public:
 	}
 
 	size_t lastIndexOf(std::function<bool(T)> predicate) {
-		size_t resultIndex = -1;
+		size_t resultIndex = npos;
 		for (size_t i = 0; i < _size; i++) {
 			if (predicate(data[i])) {
 				resultIndex = i;
@@ -158,7 +158,7 @@ public:
 				return i;
 			}
 		}
-		return -1;
+		return npos;
 	}
 	
 	void clear() { // destructs contained objects, but does not release memory
