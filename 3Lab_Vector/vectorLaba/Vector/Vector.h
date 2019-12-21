@@ -74,7 +74,7 @@ public:
 			reserve(capacity ? min(capacity * 2, max_size) : 1);
 		}
 		if (_size >= capacity) {
-			throw std::exception("Can't allocate more memory.");
+			throw std::overflow_error("Max capacity exceeded.");
 		}
 		new (data + _size) T(value); //construct new object at (data+_size)
 		_size++;
@@ -146,7 +146,7 @@ public:
 				return data[i];
 			}
 		}
-		throw std::exception(;
+		throw std::invalid_argument("Element not found.");
 	}
 
 	int findIndex(std::function<bool(T)> predicate) {
