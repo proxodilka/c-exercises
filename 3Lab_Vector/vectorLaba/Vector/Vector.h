@@ -100,8 +100,8 @@ public:
 		}
 	}
 
-	size_t lastIndexOf(std::function<bool(T)> predicate) {
-		size_t resultIndex = -1;
+	int lastIndexOf(std::function<bool(T)> predicate) {
+		int resultIndex = -1;
 		for (size_t i = 0; i < _size; i++) {
 			if (predicate(data[i])) {
 				resultIndex = i;
@@ -146,10 +146,10 @@ public:
 				return data[i];
 			}
 		}
-		throw std::exception("Element not found.");
+		throw std::exception(;
 	}
 
-	size_t findIndex(std::function<bool(T)> predicate) {
+	int findIndex(std::function<bool(T)> predicate) {
 		for (size_t i = 0; i < _size; i++) {
 			if (predicate(data[i])) {
 				return i;
@@ -176,7 +176,7 @@ public:
 		return data[index];
 	}
 
-	Vector& operator=(const Vector& other) {
+	Vector operator=(const Vector& other) {
 		clear();
 		for(size_t i = 0; i < other._size; i++) {
 			push_back(other[i]);
