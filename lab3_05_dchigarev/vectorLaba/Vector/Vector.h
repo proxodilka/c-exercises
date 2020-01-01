@@ -3,26 +3,26 @@
 
 #define min(a,b) (((a)<(b))?(a):(b))
 
-
-template<typename T>
+template<typename T, class allocator_type = std::allocator<T>>
 class Vector {
 private:
 	const static size_t max_size = INT_MAX;
 	size_t _size, capacity;
-	T* data;
+	T* _data;
+	allocator_type allocator;
 
 	void resize(size_t new_size) { 
 
-		T* new_data = static_cast<T*>(operator new[](sizeof(T)*new_size)); //allocate memory without constructing objects
+		T* new_data = allocator.allocate(new_size);
 		for (size_t i = 0; i < min(_size, new_size); i++) {
-			new (new_data + i) T(data[i]); //construct new object at (new_data+i)
+			allocator.construct(new_data + i, _data[i]);
 		}
 
 		size_t oldSize = _size;
 		dispose();
 		_size = oldSize;
 
-		data = new_data;
+		_data = new_data;
 		capacity = new_size;
 	}
 
@@ -34,25 +34,28 @@ private:
 
 	void destructContainedObjects() {
 		for (size_t i = 0; i < _size; i++) {
-			data[i].~T();
+			allocator.destroy(_data + i);
 		}
 	}
 
 public:
 
 	static const size_t npos = -1;
+	class iterator;
+	class const_iterator;
 
-	Vector() {
+	Vector(const allocator_type& allocator = allocator_type()) {
 		_size = capacity = 0;
-		data = nullptr;
+		_data = nullptr;
+		this->allocator = allocator;
 	}
 
-	Vector(size_t default_size, T default_value) : Vector(default_size) {
-		fill(default_value);
-	}
-
-	Vector(size_t default_size) : Vector() {
+	Vector(size_t default_size, const allocator_type& allocator = allocator_type()) : Vector(allocator) {
 		reserve(default_size);
+	}
+
+	Vector(size_t default_size, T default_value, const allocator_type& allocator = allocator_type()) : Vector(default_size, allocator) {
+		fill(default_value);
 	}
 
 	Vector(const std::initializer_list<T> &arg_list) : Vector(arg_list.size()) {
@@ -79,7 +82,7 @@ public:
 		if (_size >= capacity) {
 			throw std::overflow_error("Max capacity exceeded.");
 		}
-		new (data + _size) T(value); //construct new object at (data+_size)
+		allocator.construct(_data + _size, value);
 		_size++;
 	}
 
@@ -87,8 +90,8 @@ public:
 		if (index >= _size)
 			return;
 
-		data[index].~T();
-		std::copy(data + index + 1, data + _size, data + index);
+		_data[index].~T();
+		std::copy(_data + index + 1, _data + _size, _data + index);
 		_size--;
 
 		tryToReleaseMemory();
@@ -96,7 +99,7 @@ public:
 
 	void remove(std::function<bool(T)> predicate) {
 		for (size_t i = 0; i < _size; i++) {
-			if (predicate(data[i])) {
+			if (predicate(_data[i])) {
 				removeAt(i);
 				return;
 			}
@@ -106,7 +109,7 @@ public:
 	size_t lastIndexOf(std::function<bool(T)> predicate) {
 		size_t resultIndex = npos;
 		for (size_t i = 0; i < _size; i++) {
-			if (predicate(data[i])) {
+			if (predicate(_data[i])) {
 				resultIndex = i;
 			}
 		}
@@ -131,22 +134,22 @@ public:
 		if (_size == 0)
 			return;
 
-		data[_size-1].~T();
+		_data[_size-1].~T();
 		_size--;
 
 		tryToReleaseMemory();
 	}
 
 	void fill(T value) {
-		for (size_t i = 0; i < capacity; i++) {
+		for (size_t i = _size; i < capacity; i++) {
 			push_back(value);
 		}
 	}
 
 	T& find(std::function<bool(T)> predicate) {
 		for (size_t i = 0; i < _size; i++) {
-			if (predicate(data[i])) {
-				return data[i];
+			if (predicate(_data[i])) {
+				return _data[i];
 			}
 		}
 		throw std::invalid_argument("Element not found.");
@@ -154,7 +157,7 @@ public:
 
 	size_t findIndex(std::function<bool(T)> predicate) {
 		for (size_t i = 0; i < _size; i++) {
-			if (predicate(data[i])) {
+			if (predicate(_data[i])) {
 				return i;
 			}
 		}
@@ -168,18 +171,18 @@ public:
 
 	void dispose() { // destructs contained objects and release memory
 		destructContainedObjects();
-		operator delete[](data);
-		data = nullptr;
+		allocator.deallocate(_data, capacity);
+		_data = nullptr;
 		_size = capacity = 0;
 	}
 
 	T& operator[](size_t index) const{
 		if (index >= _size)
 			throw std::invalid_argument("Index does not exists");
-		return data[index];
+		return _data[index];
 	}
 
-	Vector operator=(const Vector& other) {
+	Vector& operator=(const Vector& other) {
 		clear();
 		for(size_t i = 0; i < other._size; i++) {
 			push_back(other[i]);
@@ -187,12 +190,68 @@ public:
 		return *this;
 	}
 
-	T* begin() {
-		return data;
+	iterator begin() {
+		return iterator(_data);
 	}
 
-	T* end() {
-		return data + _size;
+	iterator end() {
+		return iterator(_data + _size);
 	}
+
+	const_iterator cbegin() {
+		return const_iterator(_data);
+	}
+
+	const_iterator cend() {
+		return const_iterator(_data + _size);
+	}
+
+	T* data() {
+		return _data;
+	}
+
+	class iterator :public std::iterator<std::random_access_iterator_tag, T> {
+	protected:
+		friend Vector;
+		T* pointer;
+		iterator(T* pointer): pointer(pointer) {}
+	public:
+		T& operator*() { return *(this->pointer); }
+		T& operator[](int offset) { return *(this->pointer + offset); }
+
+		iterator operator+(int value) { return iterator(this->pointer + value); }
+		iterator operator-(int value) { return iterator(this->pointer - value); }
+		
+		bool operator==(const iterator& it) { return it.pointer == this->pointer; }
+		bool operator!=(const iterator& it) { return it.pointer != this->pointer; }
+		bool operator<(const iterator& it) { return this->pointer < it.pointer; }
+		bool operator>(const iterator& it) { return this->pointer > it.pointer; }
+		bool operator<=(const iterator& it) { return this->pointer <= it.pointer; }
+		bool operator>=(const iterator& it) { return this->pointer >= it.pointer; }
+
+		iterator& operator++(int) { this->pointer++; return *this; }
+		iterator& operator--(int) { this->pointer--; return *this; }
+		iterator operator++() {
+			iterator retValue(*this);
+			this->pointer++;
+			return retValue; 
+		}
+		iterator operator--() {
+			iterator retValue(*this);
+			this->pointer--;
+			return retValue;
+		}
+		iterator& operator+=(int value) { this->pointer += value; return *this; }
+		iterator& operator-=(int value) { this->pointer -= value; return *this; }
+	};
+
+	class const_iterator : public iterator {
+		friend Vector;
+	public:
+		const_iterator(const iterator& it): iterator(it.pointer) {}
+
+		const T& operator*() { return *(this->pointer); }
+		const T& operator[](int offset) { return *(this->pointer + offset); }
+	};
 
 };

@@ -70,7 +70,7 @@ void addToVector() {
 
 	Vector<Complex> tmpComplex(complexAmount, {0,0});
 
-	generateComplex(tmpComplex.begin(), tmpComplex.size());
+	generateComplex(tmpComplex.data(), tmpComplex.size());
 
 	cout << "Generated sequence: \n";
 	for (Complex complex : tmpComplex) {
@@ -109,10 +109,9 @@ void init() {
 	subMenu.set_menu(subOptions, "Pick option:");
 }
 
-
 int main() {
 	init();
 
-	mainMenu.run();	
+	mainMenu.run();
 
 }
