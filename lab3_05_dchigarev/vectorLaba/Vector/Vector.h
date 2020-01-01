@@ -90,7 +90,7 @@ public:
 		if (index >= _size)
 			return;
 
-		_data[index].~T();
+		allocator.destroy(_data + index);
 		std::copy(_data + index + 1, _data + _size, _data + index);
 		_size--;
 
