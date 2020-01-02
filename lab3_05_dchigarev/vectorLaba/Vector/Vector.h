@@ -1,5 +1,6 @@
 #pragma once
 #include <functional>
+#include <utility>
 
 #define min(a,b) (((a)<(b))?(a):(b))
 
@@ -12,10 +13,9 @@ private:
 	allocator_type allocator;
 
 	void resize(size_t new_size) { 
-
 		T* new_data = allocator.allocate(new_size);
 		for (size_t i = 0; i < min(_size, new_size); i++) {
-			std::allocator_traits<allocator_type>::construct(allocator, new_data + i, _data[i]);
+			std::allocator_traits<allocator_type>::construct(allocator, new_data + i, std::move(_data[i]));
 		}
 
 		size_t oldSize = _size;
@@ -36,6 +36,24 @@ private:
 		for (size_t i = 0; i < _size; i++) {
 			std::allocator_traits<allocator_type>::destroy(allocator, _data + i);
 		}
+	}
+
+	void expand() {
+		if (capacity == _size) {
+			reserve(capacity ? min(capacity * 2, max_size) : 1);
+		}
+		if (_size >= capacity) {
+			throw std::overflow_error("Max capacity exceeded.");
+		}
+	}
+
+	void rValueAssigment(Vector&& other) {
+		this->_data = other._data;
+		this->_size = other._size;
+		this->capacity = other.capacity;
+
+		other._data = nullptr;
+		other._size = other.capacity = 0;
 	}
 
 public:
@@ -71,18 +89,23 @@ public:
 		}
 	}
 
+	Vector(Vector&& other) : Vector(std::allocator_traits<allocator_type>::select_on_container_copy_construction(other.allocator)) {
+		rValueAssigment(std::move(other));
+	}
+
 	~Vector() {
 		dispose();
 	}
 
 	void push_back(const T &value) {
-		if (capacity == _size) {
-			reserve(capacity ? min(capacity * 2, max_size) : 1);
-		}
-		if (_size >= capacity) {
-			throw std::overflow_error("Max capacity exceeded.");
-		}
+		expand();
 		std::allocator_traits<allocator_type>::construct(allocator, _data + _size, value);
+		_size++;
+	}
+
+	void push_back(T&& value) {
+		expand();
+		std::allocator_traits<allocator_type>::construct(allocator, _data + _size, std::move(value));
 		_size++;
 	}
 
@@ -182,12 +205,24 @@ public:
 		return _data[index];
 	}
 
+	const T& operator[](size_t index) const {
+		if (index >= _size)
+			throw std::invalid_argument("Index does not exists");
+		return _data[index];
+	}
+
 	Vector& operator=(const Vector& other) {
 		clear();
 		reserve(other.size());
 		for(size_t i = 0; i < other._size; i++) {
 			push_back(other[i]);
 		}
+		return *this;
+	}
+
+	Vector& operator=(Vector&& other) {
+		dispose();
+		rValueAssigment(std::move(other));
 		return *this;
 	}
 
