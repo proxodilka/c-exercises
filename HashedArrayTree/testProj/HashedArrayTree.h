@@ -170,7 +170,7 @@ namespace HAT {
 	};
 
 	template<typename T>
-	class HashedArrayTree<T>::const_iterator : iterator {
+	class HashedArrayTree<T>::const_iterator : public iterator {
 		friend HashedArrayTree;
 		const_iterator(size_t index, const HashedArrayTree *sourceHAT): iterator(index, sourceHAT) {}
 
