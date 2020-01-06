@@ -1,8 +1,9 @@
 #include <iostream>
 #include <utility>
-#include "C:\Users\rp-re\OneDrive\Desktop\labs\labs-c-plus-plus\lab3_05_dchigarev\vectorLaba\Vector\Vector.h"
+//#include "C:\Users\rp-re\OneDrive\Desktop\labs\labs-c-plus-plus\lab3_05_dchigarev\vectorLaba\Vector\Vector.h"
 //#include "C:\Users\rp-re\OneDrive\Desktop\labs\labs-c-plus-plus\lab3_05_dchigarev\vectorLaba\DummyAllocator\DummyAllocator.h"
-#include "C:\Users\rp-re\OneDrive\Desktop\labs\labs-c-plus-plus\lab3_05_dchigarev\vectorLaba\Complex\Complex.h"
+//#include "C:\Users\rp-re\OneDrive\Desktop\labs\labs-c-plus-plus\lab3_05_dchigarev\vectorLaba\Complex\Complex.h"
+#include "HashedArrayTree.h"
 
 using namespace std;
 
@@ -155,74 +156,7 @@ class HashMap {
 	ValueType* data;
 };
 
-template<typename T>
-class HashedArrayTreeLeg {
-	//typedef std::allocator_traits<allocator_type>::rebind_alloc<Vector<T, allocator_type>> root_allocator;
-	//root_allocator allocator;
-	Vector < Vector<T> > roots;
-	size_t _size, coef, calcedPow, cur_ptr;
-public:
 
-	HashedArrayTreeLeg(){
-		_size = 0;
-		coef = 2;
-		cur_ptr = 0;
-		roots.restrict_memory_releasing = true;
-		roots.reserve(1 << (coef-1));
-	}
-
-	void expand() {
-		coef += 1;
-		roots.reserve(1 << coef);
-		for (Vector<T>& arr : roots) {
-			arr.reserve(1 << coef);
-		}
-		size_t ind_to_copy = 0;
-		for (int32_t i = 0; i < (int32_t)roots.size() - 1; i++) {
-			for (T& value : roots[i+1]) {
-				roots[ind_to_copy].push_back(std::move(value));
-			}
-			roots[i + 1].clear();
-			if (roots[ind_to_copy].size() == (1 << coef)) {
-				ind_to_copy++;
-			}
-		}
-		roots.removeAll([](const Vector<T>& v) {return v.size() == 0; });
-		cur_ptr = roots.size();
-	}
-
-	void push_back(const T& value) {
-		size_t root_n = _size / (1 << (coef));
-		size_t pos_n = _size % (1 << (coef));
-
-		if (root_n == cur_ptr) {
-			if (cur_ptr == (1<<coef) ) {
-				expand();
-				push_back(value);
-				return;
-			}
-			roots.push_back(Vector<T>(1<<coef, true));
-			cur_ptr++;
-		}
-
-		roots[root_n].push_back(value);
-		_size++;
-	}
-
-	T& operator[](size_t index) {
-		if (index >= _size) {
-			throw std::invalid_argument("Index does not exist");
-		}
-		size_t root_n = index / (1 << coef);
-		size_t pos_n = index % (1 << coef);
-		return roots[root_n][pos_n];
-	}
-
-	size_t size() {
-		return _size;
-	}
-
-};
 
 
 
@@ -310,7 +244,7 @@ std::chrono::milliseconds get_time() {
 //}
 
 void stress() {
-	HashedArrayTree<int> v;
+	HAT::HashedArrayTree<int> v;
 	for (int i = 0; i < 12e6; i++) {
 		v.push_back(i);
 	}
@@ -318,9 +252,21 @@ void stress() {
 }
 
 int main() {
-	system("pause");
-	stress();
-	system("pause");
+	//system("pause");
+	//stress();
+	//system("pause");
+	//int x = 5;
+	//cout << (x += 2);
+	HAT::HashedArrayTree<int> v;
+	for (int i = 0; i < 10; i++) {
+		v.push_back(i);
+	}
+	HAT::HashedArrayTree<int>::const_iterator cit = v.cbegin();
+	HAT::HashedArrayTree<int>::iterator it = v.begin();
+	*it = 2;
+	cout << *cit << " " << *it;
+	
+	
 	/*HashedArrayTree<int> v;
 	for (int i = 0; i < 3e6; i++) {
 		v.push_back(i);
