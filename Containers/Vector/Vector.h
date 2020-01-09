@@ -287,6 +287,8 @@ class Vector<T, allocator_type>::iterator : public std::iterator<std::random_acc
 template<typename T, class allocator_type>
 class Vector<T, allocator_type>::const_iterator : iterator {
 	friend Vector;
+	const_iterator(T* pointer): iterator(pointer) {}
+
 public:
 	const_iterator(const iterator& it) noexcept : iterator(it.pointer) {}
 

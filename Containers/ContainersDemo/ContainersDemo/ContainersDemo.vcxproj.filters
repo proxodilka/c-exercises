@@ -26,13 +26,19 @@
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="ContainerTester\ContainerTester.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
     <ClInclude Include="Menu\Menu.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Vector.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="Complex\Complex.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="Vector\Vector.h">
+    <ClInclude Include="HashedArrayTree\HashedArrayTree.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

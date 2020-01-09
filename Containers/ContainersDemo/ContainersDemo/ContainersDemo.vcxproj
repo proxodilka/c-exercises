@@ -20,8 +20,8 @@
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <VCProjectVersion>16.0</VCProjectVersion>
-    <ProjectGuid>{69042D7C-9221-40BF-80A5-7E33BDC43F04}</ProjectGuid>
-    <RootNamespace>testProj</RootNamespace>
+    <ProjectGuid>{C15E24ED-094E-4680-AA24-747952FA8AAB}</ProjectGuid>
+    <RootNamespace>ContainersDemo</RootNamespace>
     <WindowsTargetPlatformVersion>10.0</WindowsTargetPlatformVersion>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
@@ -100,7 +100,6 @@
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <SDLCheck>true</SDLCheck>
       <ConformanceMode>true</ConformanceMode>
-      <AdditionalOptions>/std:c++17 %(AdditionalOptions)</AdditionalOptions>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
@@ -124,14 +123,16 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="..\..\..\..\OneDrive\Desktop\labs\labs-c-plus-plus\lab3_05_dchigarev\vectorLaba\Complex\Complex.cpp" />
+    <ClCompile Include="Complex\Complex.cpp" />
     <ClCompile Include="main.cpp" />
+    <ClCompile Include="Menu\Menu.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="..\..\..\..\OneDrive\Desktop\labs\labs-c-plus-plus\lab3_05_dchigarev\vectorLaba\Complex\Complex.h" />
-    <ClInclude Include="..\..\..\..\OneDrive\Desktop\labs\labs-c-plus-plus\lab3_05_dchigarev\vectorLaba\DummyAllocator\DummyAllocator.h" />
-    <ClInclude Include="..\..\..\..\OneDrive\Desktop\labs\labs-c-plus-plus\lab3_05_dchigarev\vectorLaba\Vector\Vector.h" />
-    <ClInclude Include="HashedArrayTree.h" />
+    <ClInclude Include="..\..\Vector.h" />
+    <ClInclude Include="Complex\Complex.h" />
+    <ClInclude Include="ContainerTester\ContainerTester.h" />
+    <ClInclude Include="HashedArrayTree\HashedArrayTree.h" />
+    <ClInclude Include="Menu\Menu.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
