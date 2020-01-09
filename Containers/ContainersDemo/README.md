@@ -3,5 +3,5 @@
 For more details see
   - [ContainersDemo/ContainerTester/README.md](https://github.com/proxodilka/c-plus-plus-exercises/tree/third_lab/Containers/ContainersDemo/ContainersDemo/ContainerTester)
 
-Running example:
+Run example:
 ![screenshot](https://sun9-52.userapi.com/c855724/v855724124/1cacad/LYIiaswnkcg.jpg)
