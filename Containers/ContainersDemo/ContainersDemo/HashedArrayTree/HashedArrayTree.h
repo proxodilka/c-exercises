@@ -1,4 +1,16 @@
 #pragma once
+#include "../exceptions.h"
+
+//TODO:
+//	1. fix:
+//		a) resize doesn't work properly
+//	2. implement:
+//		a) pop_back
+//		b) removeAt
+//		c) reserve
+//	3. add:
+//		a) ability to work with custom allocator
+//		b) move semantic support
 
 
 template<typename T>
@@ -23,7 +35,7 @@ class HashedArrayTree {
 		}
 	}
 
-	T* getPointerByIndex(size_t index) const {
+	T* getPointerByIndex(size_t index) {
 		size_t root_n = index / (1 << arr_capacity_base);
 		size_t pos_n = index % (1 << arr_capacity_base);
 		return (roots[root_n] + pos_n);
@@ -68,6 +80,13 @@ class HashedArrayTree {
 		_size = old_size;
 
 		roots_size = arr_capacity / 4;
+
+		//TODO: new capacity base may be less than current, in that case method wont work properly, fix this issue
+	}
+
+	void push_new_leaf() {
+		roots[roots_size] = static_cast<T*>(operator new(sizeof(T) * arr_capacity));
+		roots_size++;
 	}
 
 public:
@@ -99,12 +118,15 @@ public:
 	}
 
 	void reserve(size_t amount) {
-
+		throw not_implemented_exception();
 	}
 
-	void push_new_leaf() {
-		roots[roots_size] = static_cast<T*>(operator new(sizeof(T) * arr_capacity));
-		roots_size++;
+	void pop_back() {
+		throw not_implemented_exception();
+	}
+
+	void removeAt(size_t index) {
+		throw not_implemented_exception();
 	}
 
 	void push_back(const T& value) {
@@ -160,10 +182,10 @@ class HashedArrayTree<T>::iterator : public std::iterator<std::random_access_ite
 protected:
 	friend HashedArrayTree;
 	T* pointer;
-	const HashedArrayTree* sourceHAT;
+	HashedArrayTree* sourceHAT;
 	size_t index;
 
-	iterator(size_t index, const HashedArrayTree* sourceHAT): pointer(sourceHAT->getPointerByIndex(index)), index(index), sourceHAT(sourceHAT) {}
+	iterator(size_t index, HashedArrayTree* sourceHAT): pointer(sourceHAT->getPointerByIndex(index)), index(index), sourceHAT(sourceHAT) {}
 	
 public:
 
@@ -202,7 +224,7 @@ public:
 template<typename T>
 class HashedArrayTree<T>::const_iterator : public iterator {
 	friend HashedArrayTree;
-	const_iterator(size_t index, const HashedArrayTree *sourceHAT): iterator(index, sourceHAT) {}
+	const_iterator(size_t index, HashedArrayTree *sourceHAT): iterator(index, sourceHAT) {}
 
 public:
 	const_iterator(const iterator& other): iterator(other.index, other.sourceHAT) {}

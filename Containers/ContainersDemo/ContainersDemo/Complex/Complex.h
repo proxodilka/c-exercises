@@ -1,6 +1,8 @@
 #pragma once
 #include <ostream>
 
+//Test class
+
 class Complex {
 private:
 	double im, re;

@@ -141,6 +141,20 @@ public:
 };
 
 template<typename T, typename... Args>
+struct has_dispose {
+private:
+
+	template<typename ...>
+	static char f(...) { return 0; }
+
+	template<typename C, typename... Margs>
+	static decltype(std::declval<C>().dispose(std::declval<Margs>()...), int()) f(int x) { return 0; }
+
+public:
+	static const bool value = sizeof(f<T, Args...>(2)) == sizeof(int);
+};
+
+template<typename T, typename... Args>
 struct has_insert {
 private:
 

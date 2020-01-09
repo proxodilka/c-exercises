@@ -41,5 +41,14 @@
     <ClInclude Include="HashedArrayTree\HashedArrayTree.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="ContainerTester\IsMethodExist.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="ContainerTester\ContainerTraits.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="exceptions.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>

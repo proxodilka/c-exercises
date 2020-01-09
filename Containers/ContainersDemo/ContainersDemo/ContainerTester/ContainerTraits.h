@@ -2,6 +2,18 @@
 #include "IsMethodExist.h"
 #include "TypeRebinder.h"
 
+//This class allows you to generalize containers methods invoking.
+//Now it has few alias for main containers methods, but you can expand for your purposes similarly.
+
+//Usage example:
+//
+//	int main() {
+//		std::vector<int> v = { 1,2,3,4,5 };
+//		ContainerTraits< std::vector<int> >::pop_front(v); //std::vector does not have method 'pop_front', 
+//														   //ContainerTraits will replace it with 'erase(v.begin())'
+//		return 0;
+//	}
+
 struct not_supported_operation : public std::exception {
 	char operation_name[64];
 	not_supported_operation(const char* op_name) {
@@ -11,7 +23,7 @@ struct not_supported_operation : public std::exception {
 		}
 		operation_name[i] = '\0';
 	}
-	const char* what() { return "Container does not support this operation."; }
+	virtual const char* what() { return "Container does not support this operation."; }
 	const char* operation_type() { return operation_name; }
 };
 
@@ -93,6 +105,11 @@ public:
 	template<typename... Args>
 	static std::enable_if_t< has_clear<T, Args...>::value > clear(T& container, Args&&... args) {
 		container.clear(std::forward<Args>(args)...);
+	}
+
+	template<typename... Args>
+	static std::enable_if_t< !has_clear<T, Args...>::value && has_dispose<T, Args...>::value> clear(T& container, Args&&... args) {
+		container.dispose(std::forward<Args>(args)...);
 	}
 
 	template<typename...>

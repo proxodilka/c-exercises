@@ -4,6 +4,28 @@
 #include "ContainerTraits.h"
 #include <chrono>
 
+//This class provides you an ability to test your container
+//It obtains a container type as a template argument and rebind contained type to class Complex
+//
+//Class provides functional to test some main methods of sequence containers, note that all container
+//methods will be invoked through 'ContainerTraits', see ContainerTraits.h for details.
+//
+//Usage examplex:
+//	
+//	int main() {
+//		ContainerTester< std::vector<int> > tester;
+//
+//		tester.fill_test();
+//		tester.pop_back_test();
+//		tester.pop_front_test();
+//
+//		tester.auto_test();
+//		return 0;
+//	}
+
+
+//TODO:
+//	1. find a way to reduce amount of same code in test methods
 
 template<class container_type>
 class ContainerTester {
@@ -77,12 +99,18 @@ public:
 			ContainerTraits<complex_container>::clear(compl_container);
 			duration = calc_time([&](auto&... args) { fill_container(args...); }, compl_container, model, amount);
 
-			for (size_t i = 0; i < amount; i++) {
-				if (model[i] != ContainerTraits<complex_container>::operator_at(compl_container, i)) {
+
+			size_t index = 0;
+			for (auto& value : compl_container) {
+				if (value != model[index]) {
 					is_ok = false;
-					error_index = i;
+					error_index = index;
 					break;
 				}
+				index++;
+			}
+			if (index != amount) {
+				is_ok = false;
 			}
 		});
 
