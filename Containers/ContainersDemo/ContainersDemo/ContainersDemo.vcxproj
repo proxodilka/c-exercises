@@ -128,13 +128,13 @@
     <ClCompile Include="Menu\Menu.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="..\..\Vector.h" />
+    <ClInclude Include="..\..\HashedArrayTree\HashedArrayTree.h" />
+    <ClInclude Include="..\..\Vector\Vector.h" />
     <ClInclude Include="Complex\Complex.h" />
     <ClInclude Include="ContainerTester\ContainerTester.h" />
     <ClInclude Include="ContainerTester\ContainerTraits.h" />
     <ClInclude Include="ContainerTester\IsMethodExist.h" />
     <ClInclude Include="exceptions.h" />
-    <ClInclude Include="HashedArrayTree\HashedArrayTree.h" />
     <ClInclude Include="Menu\Menu.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

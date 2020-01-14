@@ -1,5 +1,4 @@
 #pragma once
-#include "../exceptions.h"
 
 //TODO:
 //	1. fix:
@@ -12,6 +11,11 @@
 //		a) ability to work with custom allocator
 //		b) move semantic support
 
+class not_implemented_exception : public std::exception
+{
+public:
+	virtual char const* what() const { return "Function not yet implemented."; }
+};
 
 template<typename T>
 class HashedArrayTree {

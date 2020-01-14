@@ -1,8 +1,8 @@
 #include <iostream>
 #include "ContainerTester/ContainerTester.h"
 #include "Menu/Menu.h"
-#include "Vector/Vector.h"
-#include "HashedArrayTree/HashedArrayTree.h"
+#include "../../Vector/Vector.h"
+#include "../../HashedArrayTree/HashedArrayTree.h"
 #include <vector>
 #include <deque>
 #include <list>
