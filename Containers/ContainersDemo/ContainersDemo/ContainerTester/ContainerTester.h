@@ -171,7 +171,7 @@ public:
 		delete[] model;
 	}
 
-	void pop_front_test(size_t amount = 1e5) {
+	void pop_front_test(size_t amount = 5e4) {
 		out << "\n=============POP FRONT TEST===============\n";
 		out << "Amount: " << amount << "\n";
 		Complex* model = new Complex[amount];
